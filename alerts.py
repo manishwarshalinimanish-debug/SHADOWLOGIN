@@ -1,69 +1,58 @@
-import os
-import smtplib
-from email.mime.text import MIMEText
-
-
-def sound_alert():
-
-    print("ALERT SOUND")
+import requests
+from datetime import datetime
 
 
 def send_email_alert(log):
 
-    sender_email = os.environ.get("EMAIL_USER")
+    url = "https://api.emailjs.com/api/v1.0/email/send"
 
-    sender_password = os.environ.get("EMAIL_PASS")
+    current_time = datetime.now().strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
 
-    receiver_email = sender_email
+    data = {
 
-    subject = "ShadowLogin Attack Alert"
+        "service_id": "service_farsh1m",
 
-    body = f"""
-Attack Detected
+        "template_id": "template_mba73xy",
 
-IP: {log['ip']}
-Username: {log['username']}
-Password: {log['password']}
-Attempts: {log['attempts']}
-Country: {log['country']}
-Region: {log['region']}
-"""
+        "user_id": "OlcuBYOhur4VndMEF",
 
-    msg = MIMEText(body)
+        "template_params": {
 
-    msg["Subject"] = subject
-    msg["From"] = sender_email
-    msg["To"] = receiver_email
+            "ip": log['ip'],
+
+            "username": log['username'],
+
+            "password": log['password'],
+
+            "attempts": log['attempts'],
+
+            "country": log['country'],
+
+            "region": log['region'],
+
+            "time": current_time
+        }
+    }
+
+    headers = {
+        "Content-Type": "application/json"
+    }
 
     try:
 
-        print("Connecting to Gmail SMTP...")
-
-        server = smtplib.SMTP_SSL(
-            "smtp.gmail.com",
-            465,
+        response = requests.post(
+            url,
+            json=data,
+            headers=headers,
             timeout=10
         )
 
-        print("Logging into Gmail...")
+        print(response.text)
 
-        server.login(
-            sender_email,
-            sender_password
-        )
-
-        print("Sending email...")
-
-        server.sendmail(
-            sender_email,
-            receiver_email,
-            msg.as_string()
-        )
-
-        server.quit()
-
-        print("EMAIL SENT SUCCESSFULLY")
+        print("EMAILJS ALERT SENT")
 
     except Exception as e:
 
-        print("EMAIL ERROR:", e)
+        print("EMAILJS ERROR:", e)
