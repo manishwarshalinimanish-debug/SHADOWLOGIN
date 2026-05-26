@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>SOC Dashboard</title>
+
+<style>
+
+body{
+    background:#111827;
+    color:white;
+    font-family:Arial;
+    padding:20px;
+}
+
+h1{
+    color:red;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th, td{
+    border:1px solid white;
+    padding:12px;
+    text-align:center;
+}
+
+th{
+    background:red;
+}
+
+tr:nth-child(even){
+    background:#1f2937;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>🔥 ShadowLogin SOC Dashboard</h1>
+
+<table>
+
+<tr>
+
+<th>IP</th>
+
+<th>Country</th>
+
+<th>State</th>
+
+<th>City</th>
+
+<th>Attempts</th>
+
+<th>Wrong Password</th>
+
+</tr>
+
+{% for log in logs %}
+
+<tr>
+
+<td>{{ log.ip }}</td>
+
+<td>{{ log.country }}</td>
+
+<td>{{ log.state }}</td>
+
+<td>{{ log.city }}</td>
+
+<td>{{ log.attempts }}</td>
+
+<td>{{ log.password }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+
+</html>

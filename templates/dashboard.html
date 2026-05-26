@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>SOC Dashboard</title>
+
+    <style>
+
+        body{
+            background:#111;
+            color:white;
+            font-family:Arial;
+            padding:20px;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        th, td{
+            border:1px solid white;
+            padding:10px;
+            text-align:center;
+        }
+
+        th{
+            background:red;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h1>Live Attack Monitoring</h1>
+
+    <table>
+
+        <tr>
+            <th>IP</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Attempts</th>
+            <th>Country</th>
+            <th>Region</th>
+        </tr>
+
+        {% for log in logs %}
+
+        <tr>
+
+            <td>{{ log.ip }}</td>
+            <td>{{ log.username }}</td>
+            <td>{{ log.password }}</td>
+            <td>{{ log.attempts }}</td>
+            <td>{{ log.country }}</td>
+            <td>{{ log.region }}</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</body>
+</html>
