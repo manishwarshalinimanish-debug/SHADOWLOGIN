@@ -1,89 +1,186 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
-<title>SOC Dashboard</title>
+    <meta charset="UTF-8">
 
-<style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-body{
-    background:#111827;
-    color:white;
-    font-family:Arial;
-    padding:20px;
-}
+    <title>ShadowLogin SOC Dashboard</title>
 
-h1{
-    color:red;
-}
+    <meta http-equiv="refresh" content="5">
 
-table{
-    width:100%;
-    border-collapse:collapse;
-}
+    <style>
 
-th, td{
-    border:1px solid white;
-    padding:12px;
-    text-align:center;
-}
+        body {
 
-th{
-    background:red;
-}
+            background: #0f172a;
 
-tr:nth-child(even){
-    background:#1f2937;
-}
+            color: white;
 
-</style>
+            font-family: Arial;
+
+            margin: 0;
+
+            padding: 20px;
+        }
+
+        h1 {
+
+            text-align: center;
+
+            color: #ff3b3b;
+
+            margin-bottom: 30px;
+        }
+
+        .card {
+
+            background: #1e293b;
+
+            padding: 20px;
+
+            border-radius: 10px;
+
+            margin-bottom: 20px;
+
+            border-left: 5px solid red;
+
+            box-shadow: 0 0 10px rgba(255,0,0,0.2);
+        }
+
+        .title {
+
+            color: #38bdf8;
+
+            margin-bottom: 10px;
+
+            font-size: 20px;
+        }
+
+        .danger {
+
+            color: #ff4d4d;
+
+            font-weight: bold;
+        }
+
+        .safe {
+
+            color: #22c55e;
+        }
+
+        .blocked {
+
+            color: yellow;
+
+            font-weight: bold;
+        }
+
+        .topbar {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            margin-bottom: 20px;
+        }
+
+        .box {
+
+            background: #1e293b;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            width: 30%;
+
+            text-align: center;
+        }
+
+        .box h2 {
+
+            margin: 0;
+
+            color: #38bdf8;
+        }
+
+        .box p {
+
+            font-size: 25px;
+
+            margin-top: 10px;
+        }
+
+    </style>
 
 </head>
 
 <body>
 
-<h1>🔥 ShadowLogin SOC Dashboard</h1>
+    <h1>🚨 SHADOWLOGIN SOC DASHBOARD 🚨</h1>
 
-<table>
+    <div class="topbar">
 
-<tr>
+        <div class="box">
 
-<th>IP</th>
+            <h2>Total Attacks</h2>
 
-<th>Country</th>
+            <p>{{ logs|length }}</p>
 
-<th>State</th>
+        </div>
 
-<th>City</th>
+        <div class="box">
 
-<th>Attempts</th>
+            <h2>Status</h2>
 
-<th>Wrong Password</th>
+            <p class="danger">UNDER ATTACK</p>
 
-</tr>
+        </div>
 
-{% for log in logs %}
+        <div class="box">
 
-<tr>
+            <h2>Monitoring</h2>
 
-<td>{{ log.ip }}</td>
+            <p class="safe">ACTIVE</p>
 
-<td>{{ log.country }}</td>
+        </div>
 
-<td>{{ log.state }}</td>
+    </div>
 
-<td>{{ log.city }}</td>
+    {% for log in logs[::-1] %}
 
-<td>{{ log.attempts }}</td>
+    <div class="card">
 
-<td>{{ log.password }}</td>
+        <div class="title">
 
-</tr>
+            ⚠ Attack Attempt #{{ loop.index }}
 
-{% endfor %}
+        </div>
 
-</table>
+        <p><strong>IP Address:</strong> {{ log.ip }}</p>
+
+        <p><strong>Username:</strong> {{ log.username }}</p>
+
+        <p><strong>Password:</strong> {{ log.password }}</p>
+
+        <p><strong>Attempts:</strong> {{ log.attempts }}</p>
+
+        <p><strong>Country:</strong> {{ log.country }}</p>
+
+        <p><strong>Region:</strong> {{ log.region }}</p>
+
+        {% if log.attempts >= 5 %}
+
+        <p class="blocked">🚫 IP BLOCKED</p>
+
+        {% endif %}
+
+    </div>
+
+    {% endfor %}
 
 </body>
 
