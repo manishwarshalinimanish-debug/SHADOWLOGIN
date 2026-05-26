@@ -1,5 +1,5 @@
 import requests
-from alerts import sound_alert, send_email_alert
+from alerts import send_email_alert
 
 attack_logs = []
 
@@ -7,18 +7,28 @@ attempt_counter = {}
 
 BLOCK_LIMIT = 5
 
+
 def get_location(ip):
 
     try:
-        data = requests.get(f"https://ipapi.co/{ip}/json/").json()
+        response = requests.get(
+            f"https://ipapi.co/{ip}/json/",
+            timeout=5
+        )
+
+        data = response.json()
 
         country = data.get("country_name", "Unknown")
         region = data.get("region", "Unknown")
 
         return country, region
 
-    except:
+    except Exception as e:
+
+        print("Location Error:", e)
+
         return "Unknown", "Unknown"
+
 
 def detect_attack(ip, username, password):
 
@@ -45,13 +55,46 @@ def detect_attack(ip, username, password):
     print("\n========== ATTACK DETECTED ==========")
     print(log)
 
-    sound_alert()
+    # SAVE LOG TO FILE
+    try:
 
-    send_email_alert(log)
+        with open("attack_logs.txt", "a") as file:
 
+            file.write(
+                f"""
+IP: {ip}
+Username: {username}
+Password: {password}
+Attempts: {attempts}
+Country: {country}
+Region: {region}
+-------------------------
+"""
+            )
+
+    except Exception as e:
+
+        print("File Error:", e)
+
+    # EMAIL ALERT
+    try:
+
+        send_email_alert(log)
+
+    except Exception as e:
+
+        print("Email Error:", e)
+
+    # BLOCK IP
     if attempts >= BLOCK_LIMIT:
 
-        with open("blocked_ips.txt", "a") as f:
-            f.write(ip + "\n")
+        try:
 
-        print(f"{ip} BLOCKED")
+            with open("blocked_ips.txt", "a") as f:
+                f.write(ip + "\n")
+
+            print(f"{ip} BLOCKED")
+
+        except Exception as e:
+
+            print("Block Error:", e)

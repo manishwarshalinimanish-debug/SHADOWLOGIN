@@ -1,17 +1,19 @@
-import os
 import smtplib
 from email.mime.text import MIMEText
 
+
 def sound_alert():
 
-    os.system("echo '\a'")
+    print("ALERT SOUND")
+
 
 def send_email_alert(log):
 
     sender_email = "manishwarshalinimanish@gmail.com"
+
     sender_password = "clus absd cwhh ihjx"
 
-    receiver_email = "YOUR_EMAIL@gmail.com"
+    receiver_email = "manishwarshalinimanish@gmail.com"
 
     subject = "ShadowLogin Attack Alert"
 
@@ -34,17 +36,29 @@ Region: {log['region']}
 
     try:
 
-        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server = smtplib.SMTP(
+            "smtp.gmail.com",
+            587,
+            timeout=5
+        )
 
         server.starttls()
 
-        server.login(sender_email, sender_password)
+        server.login(
+            sender_email,
+            sender_password
+        )
 
-        server.sendmail(sender_email, receiver_email, msg.as_string())
+        server.sendmail(
+            sender_email,
+            receiver_email,
+            msg.as_string()
+        )
 
         server.quit()
 
-        print("Email Alert Sent")
+        print("Email Alert Sent Successfully")
 
     except Exception as e:
+
         print("Email Error:", e)
