@@ -1,4 +1,5 @@
 import requests
+import threading
 from alerts import send_email_alert
 
 attack_logs = []
@@ -11,6 +12,7 @@ BLOCK_LIMIT = 5
 def get_location(ip):
 
     try:
+
         response = requests.get(
             f"https://ipapi.co/{ip}/json/",
             timeout=5
@@ -19,6 +21,7 @@ def get_location(ip):
         data = response.json()
 
         country = data.get("country_name", "Unknown")
+
         region = data.get("region", "Unknown")
 
         return country, region
@@ -28,6 +31,17 @@ def get_location(ip):
         print("Location Error:", e)
 
         return "Unknown", "Unknown"
+
+
+def send_email_background(log):
+
+    try:
+
+        send_email_alert(log)
+
+    except Exception as e:
+
+        print("Email Error:", e)
 
 
 def detect_attack(ip, username, password):
@@ -53,9 +67,10 @@ def detect_attack(ip, username, password):
     attack_logs.append(log)
 
     print("\n========== ATTACK DETECTED ==========")
+
     print(log)
 
-    # SAVE LOG TO FILE
+    # SAVE LOG
     try:
 
         with open("attack_logs.txt", "a") as file:
@@ -76,14 +91,13 @@ Region: {region}
 
         print("File Error:", e)
 
-    # EMAIL ALERT
-    try:
+    # SEND EMAIL IN BACKGROUND
+    thread = threading.Thread(
+        target=send_email_background,
+        args=(log,)
+    )
 
-        send_email_alert(log)
-
-    except Exception as e:
-
-        print("Email Error:", e)
+    thread.start()
 
     # BLOCK IP
     if attempts >= BLOCK_LIMIT:
@@ -91,6 +105,7 @@ Region: {region}
         try:
 
             with open("blocked_ips.txt", "a") as f:
+
                 f.write(ip + "\n")
 
             print(f"{ip} BLOCKED")

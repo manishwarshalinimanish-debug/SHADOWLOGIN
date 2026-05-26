@@ -3,6 +3,11 @@ import smtplib
 from email.mime.text import MIMEText
 
 
+def sound_alert():
+
+    print("ALERT SOUND")
+
+
 def send_email_alert(log):
 
     sender_email = os.environ.get("EMAIL_USER")
@@ -32,16 +37,22 @@ Region: {log['region']}
 
     try:
 
+        print("Connecting to Gmail SMTP...")
+
         server = smtplib.SMTP_SSL(
             "smtp.gmail.com",
             465,
             timeout=10
         )
 
+        print("Logging into Gmail...")
+
         server.login(
             sender_email,
             sender_password
         )
+
+        print("Sending email...")
 
         server.sendmail(
             sender_email,
