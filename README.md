@@ -63,7 +63,7 @@ SHADOWLOGIN is a secure authentication and login monitoring system developed usi
 ### Frontend
 
 * HTML5
-* CSS3
+* CSS
 * JavaScript
 * Bootstrap
 
