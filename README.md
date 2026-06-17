@@ -2,7 +2,7 @@
 
 ## Secure Authentication & Suspicious Login Detection System
 
-SHADOWLOGIN is a secure authentication and login monitoring system developed using Python and Django. The project is designed to strengthen user account security by tracking login attempts, detecting suspicious activities, recording login metadata, and sending real-time alerts for unauthorized access attempts.
+SHADOWLOGIN is a secure authentication and login monitoring system developed using Python . The project is designed to strengthen user account security by tracking login attempts, detecting suspicious activities, recording login metadata, and sending real-time alerts for unauthorized access attempts.
 
 ---
 
