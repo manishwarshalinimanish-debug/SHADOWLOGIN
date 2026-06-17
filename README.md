@@ -59,7 +59,6 @@ SHADOWLOGIN is a secure authentication and login monitoring system developed usi
 ### Backend
 
 * Python
-* Django Framework
 
 ### Frontend
 
